@@ -1,0 +1,233 @@
+
+/* SETUP */
+
+@font-face {
+  font-family: "segment";
+  src: url('7-seg.otf') format('opentype');
+}
+
+
+/* MAIN LAYOUT */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  font-family: monospace;
+  align-items: stretch;
+}
+
+body .left, body .right {
+  flex: 1;
+}
+
+
+/* MODULE / BREADBOARD */
+
+.module {
+  border: 1px solid lightgrey;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  min-height: 30px;
+}
+
+.module h2, .module h3 {
+  margin: 0;
+}
+
+.module > div {
+  margin-left: 20px;
+  vertical-align: top;
+  align-self: flex-start;
+}
+
+
+/* LED */
+
+.led {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin: 5px 0;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.led              { background: darkgrey; }
+.led[on]          { background: lightgrey; }
+.led:hover        { background: lightgrey; }
+
+.led.blue         { background: darkblue; }
+.led.blue[on]     { background: deepskyblue; }
+.led.blue:hover   { background: deepskyblue; }
+
+.led.green        { background: green; }
+.led.green[on]    { background: limegreen; }
+.led.green:hover  { background: limegreen; }
+
+.led.yellow       { background: olive; }
+.led.yellow[on]   { background: yellow; }
+.led.yellow:hover { background: yellow; }
+
+.led.red          { background: darkred; }
+.led.red[on]      { background: red; }
+.led.red:hover    { background: red; }
+
+
+/* READOUT */
+
+.readout {
+  font-size: 18px;
+  display: inline-block;
+  font-family: "segment";
+  vertical-align: middle;
+  background: black;
+  padding: 5px 5px 0;
+  text-align: center;
+  border-radius: 5px
+}
+
+.readout.big {
+  font-size: 32px;
+  padding: 7px 6px 0;
+}
+
+.readout.red    { color: red; }
+.readout.blue   { color: deepskyblue; }
+.readout.green  { color: limegreen; }
+.readout.yellow { color: yellow; }
+
+
+/* BUTTON */
+
+button {
+  display: block;
+  width: 30px;
+  height: 30px;
+  background: #333;
+  border: 0px none;
+  position: relative;
+  vertical-align: middle;
+  outline: 0px none;
+}
+
+button:before {
+  position: absolute;
+  content: "";
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  top: 5%;
+  left: 5%;
+  background: darkgrey;
+}
+
+button:active:before {
+  background: lightgrey;
+}
+
+
+/* LABELS */
+
+label {
+  text-align: center;
+  margin-bottom: 5px;
+  display: block;
+}
+
+
+/* CONTROL SECTION */
+
+.control {
+  display: flex;
+  align-items: center;
+}
+
+.control.vert {
+  flex-direction: column;
+}
+
+.control .control {
+  width: 15px;
+}
+
+.control .control label {
+  transform: rotate(-90deg) translateX(-5px);
+  width: 23px;
+  text-align: right;
+}
+
+
+/* FLAG STATUS SECTION */
+
+.flags {
+  display: flex;
+  align-items: center;
+  padding-top: 3px;
+}
+
+.flag {
+  display: block;
+  padding: 2px 5px 3px;
+  border-radius: 5px;
+  background: grey;
+  color: lightgrey;
+}
+
+.flag + .flag {
+  margin-left: 4px;
+}
+
+.flag[on] {
+  color: white;
+  background: black;
+  font-weight: bold;
+}
+
+
+/* MAINBUS */
+
+.mainbus {
+  padding: 5px;
+  border: 1px solid lightgrey;
+  margin: 0 3px;
+}
+
+.mainbus-strips {
+  display: flex;
+}
+
+.mainbus .readout {
+  display: block;
+  margin-top: 5px;
+}
+
+.strip {
+  background: darkred;
+  width: 6px;
+  min-height: 400px;
+  border-radius: 3px;
+}
+
+.strip[on],
+.strip:hover {
+  background: red;
+}
+
+.strip + .strip {
+  margin-left: 1px;
+}
+
+
+/* COMBINED LAYOUTS */
+
+.led + .readout,
+.readout + .led {
+  margin-left: 5px;
+}
+
