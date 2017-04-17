@@ -18,25 +18,23 @@ module.exports = class ProgramCounter extends Module
     super ...
 
     # State
-    @ce = no
-    @co = no
+    @flag \inc
+    @flag \out
     @value = 0
 
     # Components
     @bits  = new LedBits '[data-pc-bit]'
     @digit = new Segment '[data-pc-value]'
     @flags =
-      ce: new Flag '[data-pc-flag="ce"]'
-      co: new Flag '[data-pc-flag="co"]'
+      inc: new Flag '[data-pc-flag="ce"]'
+      out: new Flag '[data-pc-flag="co"]'
 
-  set: (flag, val) ->
-    if not this[flag]? then return console.warn 'ProgramCounter::set - no such flag:', flag
-    this[flag] = val
-    @flags[flag].set val
-
-  clock: ->
-    if @ce
+  clock: (bus) ->
+    if @inc
       @value = wrap 0, 15, @value + 1
       @bits.set  @value
       @digit.set @value
+
+    if @out
+      bus.set @value
 

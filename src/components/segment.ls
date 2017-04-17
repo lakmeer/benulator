@@ -1,5 +1,6 @@
 
-{ log, Q, hex } = require \helpers
+{ log, Q, pad } = require \helpers
+
 
 
 # Segment
@@ -8,9 +9,14 @@
 # shows, the controlling module should clamp it's values appropriately.
 
 module.exports = class Segment
-  (sel) ->
-    @dom = Q sel
+  (sel, @len = 1, scope = document) ->
+    @dom = Q sel, scope
+    @base = 16
+    @set 0
+
+  hex: ->
+    @base = if it then 16 else 10
 
   set: ->
-    @dom.text-content = hex it
+    @dom.text-content = pad @len, it.to-string @base
 

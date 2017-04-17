@@ -11,19 +11,20 @@
       <div class="module" id="clock">
         <h3>Clock</h3>
 
+        <div class="flags">
+          <div class="flag" data-clock-flag="hlt">HLT</div>
+        </div>
+
         <div class="control vert">
-          <label>rate</label>
           <div class="pot" data-clock-rate></div>
         </div>
 
         <div class="control vert">
-          <label>signal</label>
-          <div class="led blue" data-clock-signal></div>
+          <button data-clock-step></button>
         </div>
 
         <div class="control vert">
-          <label>step</label>
-          <button data-clock-step></button>
+          <div class="led blue" data-clock-signal></div>
         </div>
       </div>
 
@@ -35,13 +36,16 @@
           <div class="led yellow" data-mar-bit="2"></div>
           <div class="led yellow" data-mar-bit="1"></div>
           <div class="led yellow" data-mar-bit="0"></div>
-
-          <div class="readout yellow" data-mar-value>0</div>
         </div>
       </div>
 
       <div class="module" id="ram">
         <h3>RAM</h3>
+
+        <div class="flags">
+          <div class="flag" data-ram-flag="in">RI</div>
+          <div class="flag" data-ram-flag="out">RO</div>
+        </div>
 
         <div class="control">
           <div class="led red" data-ram-bit="7"></div>
@@ -52,12 +56,11 @@
           <div class="led red" data-ram-bit="2"></div>
           <div class="led red" data-ram-bit="1"></div>
           <div class="led red" data-ram-bit="0"></div>
-          <div class="readout red" data-ram-value>0</div>
         </div>
       </div>
 
       <div class="module" id="instruction">
-        <h3>Inst Reg</h3>
+        <h3>Reg I</h3>
 
         <div class="control">
           <div class="led blue" data-inst-bit="7"></div>
@@ -69,7 +72,6 @@
           <div class="led yellow" data-inst-bit="2"></div>
           <div class="led yellow" data-inst-bit="1"></div>
           <div class="led yellow" data-inst-bit="0"></div>
-          <div class="readout yellow" data-inst-value-low>0</div>
         </div>
       </div>
     </div>
@@ -91,8 +93,8 @@
 
 
     <div class="right">
-      <div class="module" id="program-counter">
-        <h3>Prog Count</h3>
+      <div class="module" id="counter">
+        <h3>Counter</h3>
 
         <div class="flags">
           <div class="flag" data-pc-flag="ce">CE</div>
@@ -108,59 +110,75 @@
         </div>
       </div>
 
-      <div class="module" id="a-register">
+      <div class="module" id="register-a">
         <h3>Reg A</h3>
 
+        <div class="flags">
+          <div class="flag" data-reg-flag="in">AI</div>
+          <div class="flag" data-reg-flag="out">AO</div>
+        </div>
+
         <div class="control">
-          <div class="led red" data-rax-bit="7"></div>
-          <div class="led red" data-rax-bit="6"></div>
-          <div class="led red" data-rax-bit="5"></div>
-          <div class="led red" data-rax-bit="4"></div>
-          <div class="led red" data-rax-bit="3"></div>
-          <div class="led red" data-rax-bit="2"></div>
-          <div class="led red" data-rax-bit="1"></div>
-          <div class="led red" data-rax-bit="0"></div>
-          <div class="readout red" data-rax-value>0</div>
+          <div class="led red" data-reg-bit="7"></div>
+          <div class="led red" data-reg-bit="6"></div>
+          <div class="led red" data-reg-bit="5"></div>
+          <div class="led red" data-reg-bit="4"></div>
+          <div class="led red" data-reg-bit="3"></div>
+          <div class="led red" data-reg-bit="2"></div>
+          <div class="led red" data-reg-bit="1"></div>
+          <div class="led red" data-reg-bit="0"></div>
         </div>
       </div>
 
-      <div class="module" id="a-register">
+      <div class="module" id="alu">
         <h3>ALU</h3>
 
+        <div class="flags">
+          <div class="flag" data-alu-flag="sub">SU</div>
+          <div class="flag" data-alu-flag="out">EO</div>
+        </div>
+
         <div class="control">
-          <div class="led red" data-acc-bit="7"></div>
-          <div class="led red" data-acc-bit="6"></div>
-          <div class="led red" data-acc-bit="5"></div>
-          <div class="led red" data-acc-bit="4"></div>
-          <div class="led red" data-acc-bit="3"></div>
-          <div class="led red" data-acc-bit="2"></div>
-          <div class="led red" data-acc-bit="1"></div>
-          <div class="led red" data-acc-bit="0"></div>
-          <div class="readout red" data-acc-value>0</div>
+          <div class="led red" data-alu-bit="7"></div>
+          <div class="led red" data-alu-bit="6"></div>
+          <div class="led red" data-alu-bit="5"></div>
+          <div class="led red" data-alu-bit="4"></div>
+          <div class="led red" data-alu-bit="3"></div>
+          <div class="led red" data-alu-bit="2"></div>
+          <div class="led red" data-alu-bit="1"></div>
+          <div class="led red" data-alu-bit="0"></div>
         </div>
       </div>
 
-      <div class="module" id="a-register">
+      <div class="module" id="register-b">
         <h3>Reg B</h3>
 
+        <div class="flags">
+          <div class="flag" data-reg-flag="in">BI</div>
+          <div class="flag" data-reg-flag="out">BO</div>
+        </div>
+
         <div class="control">
-          <div class="led red" data-bax-bit="7"></div>
-          <div class="led red" data-bax-bit="6"></div>
-          <div class="led red" data-bax-bit="5"></div>
-          <div class="led red" data-bax-bit="4"></div>
-          <div class="led red" data-bax-bit="3"></div>
-          <div class="led red" data-bax-bit="2"></div>
-          <div class="led red" data-bax-bit="1"></div>
-          <div class="led red" data-bax-bit="0"></div>
-          <div class="readout red" data-bax-value>0</div>
+          <div class="led red" data-reg-bit="7"></div>
+          <div class="led red" data-reg-bit="6"></div>
+          <div class="led red" data-reg-bit="5"></div>
+          <div class="led red" data-reg-bit="4"></div>
+          <div class="led red" data-reg-bit="3"></div>
+          <div class="led red" data-reg-bit="2"></div>
+          <div class="led red" data-reg-bit="1"></div>
+          <div class="led red" data-reg-bit="0"></div>
         </div>
       </div>
 
       <div class="module" id="output">
         <h3>Output</h3>
 
+        <div class="flags">
+          <div class="flag" data-out-flag="oi">OI</div>
+        </div>
+
         <div class="control">
-          <div class="readout red big" data-out-value>000</div>
+          <div class="readout blue big" data-out-value>000</div>
         </div>
       </div>
 

@@ -6,8 +6,8 @@ Led = require \./led
 
 module.exports = class LedBits
 
-  (sel) ->
-    @dom = QSA sel .reverse!
+  (sel, scope) ->
+    @dom = QSA sel, scope .reverse!
     @leds = @dom.map -> new Led it
 
   set: ->

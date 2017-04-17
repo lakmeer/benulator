@@ -9,8 +9,8 @@
 #
 
 module.exports = class Led
-  (sel) ->
-    @dom = Q sel
+  (sel, scope) ->
+    @dom = Q sel, scope
 
   on: ->
     @dom.set-attribute \on, true

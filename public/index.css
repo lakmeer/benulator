@@ -43,7 +43,6 @@ body .left, body .right {
 .module > div {
   margin-left: 20px;
   vertical-align: top;
-  align-self: flex-start;
 }
 
 
@@ -60,28 +59,24 @@ body .left, body .right {
 
 .led              { background: darkgrey; }
 .led[on]          { background: lightgrey; }
-.led:hover        { background: lightgrey; }
 
 .led.blue         { background: darkblue; }
 .led.blue[on]     { background: deepskyblue; }
-.led.blue:hover   { background: deepskyblue; }
 
 .led.green        { background: green; }
 .led.green[on]    { background: limegreen; }
-.led.green:hover  { background: limegreen; }
 
 .led.yellow       { background: olive; }
 .led.yellow[on]   { background: yellow; }
-.led.yellow:hover { background: yellow; }
 
 .led.red          { background: darkred; }
 .led.red[on]      { background: red; }
-.led.red:hover    { background: red; }
 
 
 /* READOUT */
 
 .readout {
+  text-transform: uppercase;
   font-size: 18px;
   display: inline-block;
   font-family: "segment";
@@ -214,8 +209,7 @@ label {
   border-radius: 3px;
 }
 
-.strip[on],
-.strip:hover {
+.strip[on] {
   background: red;
 }
 
