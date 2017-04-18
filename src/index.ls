@@ -12,6 +12,7 @@ Output   = require \./modules/output
 ALU      = require \./modules/alu
 RAM      = require \./modules/ram
 MAR      = require \./modules/mar
+Control  = require \./modules/control
 
 
 # Main Program
@@ -31,6 +32,7 @@ init = ->
     reg-a  = new Register \#register-a
     reg-b  = new Register \#register-b
     output = new Output \#output, 4
+    control = new Control \#control
   ]
 
 
@@ -49,21 +51,21 @@ init = ->
   micro = (...codes) -> ->
     for code in codes
       switch code
-      | \hlt => clock.set  \halt
-      | \mi  => mar.set    \in
-      | \ri  => ram.set    \in
-      | \ro  => ram.set    \out
-      #| \io  => instr.set  \out
-      #| \ii  => instr.set  \in
-      | \ai  => reg-a.set  \in
-      | \ao  => reg-a.set  \out
-      | \eo  => alu.set    \out
-      | \su  => alu.set    \sub
-      | \bi  => reg-b.set  \in
-      | \oi  => output.set \in
-      | \ce  => pc.set     \inc
-      | \co  => pc.set     \out
-      | \j   => pc.set     \jmp
+      | \hlt => control.set \hlt; clock.set  \halt
+      | \mi  => control.set \mi; mar.set    \in
+      | \ri  => control.set \ri; ram.set    \in
+      | \ro  => control.set \ro; ram.set    \out
+      #| \io => control.set \io; instr.set  \out
+      #| \ii => control.set \ii; instr.set  \in
+      | \ai  => control.set \ai; reg-a.set  \in
+      | \ao  => control.set \ao; reg-a.set  \out
+      | \eo  => control.set \eo; alu.set    \out
+      | \su  => control.set \su; alu.set    \sub
+      | \bi  => control.set \bi; reg-b.set  \in
+      | \oi  => control.set \oi; output.set \in
+      | \ce  => control.set \ce; pc.set     \inc
+      | \co  => control.set \co; pc.set     \out
+      | \j   => control.set \j;  pc.set     \jmp
       | _    => warn "Unsupported microinstruction:", code
 
   lib =
@@ -116,7 +118,7 @@ init = ->
 
   # Start
 
-  clock.rate = 1
+  clock.rate = 500
   clock.start!
 
 

@@ -26,7 +26,6 @@ module.exports = class MemoryAccessRegister extends Module
     @flags = in: new Flag '[data-flag="in"]', @dom
 
   write: ->
-    log \MAR-write it
     @value = it
     @bits.set it
 
