@@ -38,6 +38,7 @@ body .left, body .right {
 
 .module h2, .module h3 {
   margin: 0;
+  flex-basis: 18%;
 }
 
 .module > div {
@@ -162,6 +163,7 @@ label {
 
 .flags {
   display: flex;
+  flex: 1;
   align-items: center;
   padding-top: 3px;
 }
@@ -215,6 +217,10 @@ label {
 
 .strip + .strip {
   margin-left: 1px;
+}
+
+.strip:nth-child(4) {
+  margin-right: 3px;
 }
 
 

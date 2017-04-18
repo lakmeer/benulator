@@ -18,7 +18,7 @@ module.exports = class Clock extends Module
 
     # State
     @halt = on
-    @rate = 500
+    @rate = 200
     @callbacks = []
 
     # Display components
@@ -28,6 +28,7 @@ module.exports = class Clock extends Module
 
     # Init
     @blip!
+    @flags.halt.on-click ~> @flip \halt
     @button.add-event-listener \click, @step
 
   start: ->

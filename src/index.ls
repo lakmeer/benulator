@@ -11,6 +11,7 @@ Register = require \./modules/register
 Output   = require \./modules/output
 ALU      = require \./modules/alu
 RAM      = require \./modules/ram
+MAR      = require \./modules/mar
 
 
 # Main Program
@@ -21,10 +22,11 @@ init = ->
   # This will also be the order of resolution on each tick.
 
   all-modules = [
+    bus    = new Mainbus \#mainbus
     clock  = new Clock \#clock
     pc     = new Counter \#program-counter
+    mar    = new MAR \#mar
     ram    = new RAM \#ram
-    bus    = new Mainbus \#mainbus
     alu    = new ALU \#alu
     reg-a  = new Register \#register-a
     reg-b  = new Register \#register-b
@@ -37,6 +39,7 @@ init = ->
 
   alu.expose-register \a, reg-a
   alu.expose-register \b, reg-b
+  ram.expose-register \mar, mar
 
 
   # Library of microinstructions, and helpers for performing them
@@ -47,7 +50,7 @@ init = ->
     for code in codes
       switch code
       | \hlt => clock.set  \halt
-      #| \mi  => mar.set    \in
+      | \mi  => mar.set    \in
       | \ri  => ram.set    \in
       | \ro  => ram.set    \out
       #| \io  => instr.set  \out
@@ -55,12 +58,12 @@ init = ->
       | \ai  => reg-a.set  \in
       | \ao  => reg-a.set  \out
       | \eo  => alu.set    \out
-      | \su  => pc.set     \ce
+      | \su  => alu.set    \sub
       | \bi  => reg-b.set  \in
       | \oi  => output.set \in
       | \ce  => pc.set     \inc
       | \co  => pc.set     \out
-      #| \j   => pc.set     \jump
+      | \j   => pc.set     \jmp
       | _    => warn "Unsupported microinstruction:", code
 
   lib =
@@ -69,7 +72,8 @@ init = ->
       # * micro \ro \ii
       * micro \ce
       -> bus.set n
-      * micro \ai
+      * micro \mi
+      * micro \ro \ai
     ]
 
     ADD: (n) -> [
@@ -77,7 +81,8 @@ init = ->
       # * micro \ro \ii
       * micro \ce
       -> bus.set n
-      * micro \bi
+      * micro \mi
+      * micro \ro \bi
       # * micro \ro \bi
       * micro \eo \ai
     ]
@@ -93,8 +98,8 @@ init = ->
   # Assemble a program
 
   instr = [ ]
-  instr ++= lib.LDA 28
-  instr ++= lib.ADD 14
+  instr ++= lib.LDA 14
+  instr ++= lib.ADD 15
   instr ++= lib.OUT!
 
 
@@ -111,7 +116,12 @@ init = ->
 
   # Start
 
+  clock.rate = 1
   clock.start!
+
+
+  # TODO: Seperate rising/falling clock edges so the state of population
+  # of various registers can look identical to ben's videos
 
 
 document.add-event-listener \DOMContentLoaded, init

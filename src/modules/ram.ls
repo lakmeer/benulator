@@ -1,9 +1,10 @@
 
-{ log, pad, hex, bin, dec } = require \helpers
+{ log, warn } = require \helpers
 
-Flag    = require \../components/flag
-LedBits = require \../components/ledbits
-Module = require \./module
+Flag       = require \../components/flag
+LedBits    = require \../components/ledbits
+MemoryDump = require \../components/memory
+Module     = require \./module
 
 unlines = (.join "\n")
 
@@ -36,7 +37,7 @@ module.exports = class RAM extends Module
       2~0        # C: <niL>
       2~0        # D: <niL>
       2~00011100 # E: 28 const
-      2~00001110 # F: 14 const
+      2~00001111 # F: 14 const
     ]
 
     #@dump!
@@ -46,10 +47,11 @@ module.exports = class RAM extends Module
     @flag \out
     @inputs = mar: { value: 0 }
     @addr   = 0
-    @value  = @contents.0
+    @value  = @contents[@addr]
 
     # Components
-    @bits  = new LedBits '[data-ram-bit]'
+    @bits = new LedBits    '[data-ram-bit]'
+    @dump = new MemoryDump '[data-ram-dump]'
     @flags =
       in:  new Flag '[data-ram-flag="in"]'
       out: new Flag '[data-ram-flag="out"]'
@@ -65,4 +67,12 @@ module.exports = class RAM extends Module
     log unlines [ 'ADDR   BINARY    HEX DEC' ] ++
       for val, addr in @contents
         ' ' + (pad 2, hex addr) + '    ' + (pad 8, bin val) + '  ' + (pad 2, hex val) + '  ' + (pad 3, dec val)
+
+  clock: (bus) ->
+    @addr  = @inputs.mar.value
+    @value = @contents[@addr]
+    if @out then bus.set @value
+    @bits.set @value
+    @dump.set @contents, @addr
+
 

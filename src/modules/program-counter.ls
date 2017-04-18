@@ -20,6 +20,7 @@ module.exports = class ProgramCounter extends Module
     # State
     @flag \inc
     @flag \out
+    @flag \jmp
     @value = 0
 
     # Components
@@ -28,6 +29,7 @@ module.exports = class ProgramCounter extends Module
     @flags =
       inc: new Flag '[data-pc-flag="ce"]'
       out: new Flag '[data-pc-flag="co"]'
+      jmp: new Flag '[data-pc-flag="j"]'
 
   clock: (bus) ->
     if @inc
