@@ -13,6 +13,10 @@
   box-sizing: border-box;
 }
 
+html, body {
+  background: #320;
+}
+
 body {
   display: flex;
   font-family: monospace;
@@ -27,7 +31,9 @@ body .left, body .right {
 /* MODULE / BREADBOARD */
 
 .module {
+  background: white;
   border: 1px solid lightgrey;
+  border-radius: 3px;
   padding: 20px;
   display: flex;
   align-items: center;
@@ -97,6 +103,38 @@ body .left, body .right {
 .readout.blue   { color: deepskyblue; }
 .readout.green  { color: limegreen; }
 .readout.yellow { color: yellow; }
+
+
+/* MEMORY WINDOW */
+
+.memory-dump {
+  position: relative;
+  display: flex;
+  font-size: 12px;
+  line-height: 0.8em;
+  flex-wrap: wrap;
+  cursor: none;
+}
+
+.memory-dump div {
+  display: block;
+  padding: 0 5px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.memory-dump div[read]  { background: pink; }
+.memory-dump div[write] { background: lightgreen; }
+
+.inspector {
+  position: absolute;
+  background: white;
+  font-size: 12px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 3px rgba(0,0,0,0.5);
+  padding: 0.5em 0.8em 0.5em 1em;
+  border-radius: 0 10px 10px 10px;
+}
 
 
 /* BUTTON */
@@ -190,9 +228,11 @@ label {
 /* MAINBUS */
 
 .mainbus {
+  background: white;
   padding: 5px;
   border: 1px solid lightgrey;
   margin: 0 3px;
+  border-radius: 3px;
 }
 
 .mainbus-strips {

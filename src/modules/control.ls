@@ -56,7 +56,6 @@ module.exports = class ControlReadout extends Module
   write: ->
     @value = it
 
-  clock: ->
-
-
+  rise: ->
+  fall: ->
 

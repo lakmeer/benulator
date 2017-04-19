@@ -22,13 +22,15 @@ module.exports = class MemoryAccessRegister extends Module
     @value = 0
 
     # Components
-    @bits  = new LedBits '[data-mar-bit]', @dom
+    @bits  = new LedBits '[data-mar-bit]',    @dom
     @flags = in: new Flag '[data-flag="in"]', @dom
 
   write: ->
     @value = it
     @bits.set it
 
-  clock: (bus) ->
-    if @in  then @write bus.value
+  rise: (bus) ->
+
+  fall: (bus) ->
+    if @in then @write bus.value
 

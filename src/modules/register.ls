@@ -33,6 +33,9 @@ module.exports = class Register extends Module
     @value = it
     @bits.set it
 
-  clock: (bus) ->
-    if @in  then @write bus.value
+  rise: (bus) ->
+    if @out then bus.set @value
+
+  fall: (bus) ->
+    if @in then @write bus.value
 

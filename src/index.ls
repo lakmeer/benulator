@@ -1,18 +1,19 @@
 
-{ log } = require \helpers
+{ log, wrap } = require \helpers
 
 
 # Modules
 
-Clock    = require \./modules/clock
-Counter  = require \./modules/program-counter
-Mainbus  = require \./modules/mainbus
-Register = require \./modules/register
-Output   = require \./modules/output
-ALU      = require \./modules/alu
-RAM      = require \./modules/ram
-MAR      = require \./modules/mar
-Control  = require \./modules/control
+Clock                = require \./modules/clock
+ProgramCounter       = require \./modules/program-counter
+Mainbus              = require \./modules/mainbus
+Register             = require \./modules/register
+Output               = require \./modules/output
+ALU                  = require \./modules/alu
+RAM                  = require \./modules/ram
+MemoryAccessRegister = require \./modules/mar
+Control              = require \./modules/control
+InstructionRegister  = require \./modules/instruction-register
 
 
 # Main Program
@@ -23,21 +24,29 @@ init = ->
   # This will also be the order of resolution on each tick.
 
   all-modules = [
-    bus    = new Mainbus \#mainbus
-    clock  = new Clock \#clock
-    pc     = new Counter \#program-counter
-    mar    = new MAR \#mar
-    ram    = new RAM \#ram
-    alu    = new ALU \#alu
-    reg-a  = new Register \#register-a
-    reg-b  = new Register \#register-b
-    output = new Output \#output, 4
+    bus     = new Mainbus \#mainbus
+    clock   = new Clock \#clock
+    pc      = new ProgramCounter \#program-counter
+    mar     = new MemoryAccessRegister \#mar
+    ram     = new RAM \#ram
+    reg-i   = new InstructionRegister \#instr
+    reg-a   = new Register \#register-a
+    reg-b   = new Register \#register-b
+    alu     = new ALU \#alu
+    output  = new Output \#output, 4
     control = new Control \#control
   ]
 
 
-  # Connect together those module which need it (don't worry about the main
-  # bus, everyone gets that automatically)
+  # Connect together those modules which need it (don't worry about the main
+  # bus, everyone gets that automatically).
+  #
+  # Because of the way the simulator is designed, when modules are connected
+  # together directly in this way, their ordering in that instantiation list
+  # above becomes important. Basically, any dependants should go above their
+  # dependers in the list, like registers above the ALU. This is because the
+  # modules can draw updated values from their dependencies at any time, not
+  # just on the falling edge of the clock, so we want the most recent update.
 
   alu.expose-register \a, reg-a
   alu.expose-register \b, reg-b
@@ -48,82 +57,64 @@ init = ->
 
   set = (mod, flag) -> all-modules.filter (is mod) .0.set flag
 
-  micro = (...codes) -> ->
+  micro = (...codes) ->
     for code in codes
+      control.set code
       switch code
-      | \hlt => control.set \hlt; clock.set  \halt
-      | \mi  => control.set \mi; mar.set    \in
-      | \ri  => control.set \ri; ram.set    \in
-      | \ro  => control.set \ro; ram.set    \out
-      #| \io => control.set \io; instr.set  \out
-      #| \ii => control.set \ii; instr.set  \in
-      | \ai  => control.set \ai; reg-a.set  \in
-      | \ao  => control.set \ao; reg-a.set  \out
-      | \eo  => control.set \eo; alu.set    \out
-      | \su  => control.set \su; alu.set    \sub
-      | \bi  => control.set \bi; reg-b.set  \in
-      | \oi  => control.set \oi; output.set \in
-      | \ce  => control.set \ce; pc.set     \inc
-      | \co  => control.set \co; pc.set     \out
-      | \j   => control.set \j;  pc.set     \jmp
+      | \hlt => clock.set  \halt
+      | \mi  => mar.set    \in
+      | \ri  => ram.set    \in
+      | \ro  => ram.set    \out
+      | \ii  => reg-i.set  \in
+      | \io  => reg-i.set  \out
+      | \ai  => reg-a.set  \in
+      | \ao  => reg-a.set  \out
+      | \eo  => alu.set    \out
+      | \su  => alu.set    \sub
+      | \bi  => reg-b.set  \in
+      | \oi  => output.set \in
+      | \ce  => pc.set     \inc
+      | \co  => pc.set     \out
+      | \j   => pc.set     \jmp
       | _    => warn "Unsupported microinstruction:", code
-
-  lib =
-    LDA: (n) -> [
-      # * micro \co \mi
-      # * micro \ro \ii
-      * micro \ce
-      -> bus.set n
-      * micro \mi
-      * micro \ro \ai
-    ]
-
-    ADD: (n) -> [
-      # * micro \co \mi
-      # * micro \ro \ii
-      * micro \ce
-      -> bus.set n
-      * micro \mi
-      * micro \ro \bi
-      # * micro \ro \bi
-      * micro \eo \ai
-    ]
-
-    OUT: -> [
-      # * micro \co \mi
-      # * micro \ro \ii
-      * micro \ce
-      * micro \ao \oi
-    ]
-
-
-  # Assemble a program
-
-  instr = [ ]
-  instr ++= lib.LDA 14
-  instr ++= lib.ADD 15
-  instr ++= lib.OUT!
 
 
   # Run instructions when clock pulses
 
-  pi = 0
+  mpc = 0
+
+  [ NOP, LDA, ADD, _, _, _, _, _, _, _, _, _, _, _, OUT, HLT, ] = [ 0 to 15 ]
+
+  microcode = (mpc, instr, arg = 0) ->
+
+    steps =
+      if mpc < 3 # Fetch steps
+        [ [ \co \mi ], [ \ro \ii ], [ \ce ] ]
+      else          # Instruction-specific steps
+        switch instr
+        | NOP => [ ]
+        | LDA => [ [ \io \mi ], [ \ro \ai ] ]
+        | ADD => [ [ \io \mi ], [ \ro \bi ], [ \eo \ai ] ]
+        | OUT => [ [ \ao \oi ] ]
+        | HLT => [ [ \hlt ] ]
+
+    if action = steps[mpc % 3]
+      micro ...action
+
+    #log "Step:", mpc, if action then action.join ', ' else  "(no actions)"
 
   clock.on-clock ->
-    all-modules.map (.clock bus)
+    all-modules.map (.rise bus)
+    all-modules.map (.fall bus)
     all-modules.map (.clear-all!)
-    if instr[pi]? then that! else set clock, \halt
-    pi += 1
+    microcode mpc, reg-i.instr, reg-i.arg
+    mpc := wrap 0, 5, mpc + 1
 
 
   # Start
 
-  clock.rate = 500
-  clock.start!
-
-
-  # TODO: Seperate rising/falling clock edges so the state of population
-  # of various registers can look identical to ben's videos
+  clock.rate = 20
+  #clock.start!
 
 
 document.add-event-listener \DOMContentLoaded, init

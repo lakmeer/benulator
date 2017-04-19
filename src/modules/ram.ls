@@ -25,7 +25,7 @@ module.exports = class RAM extends Module
       2~00011110 # 0: LDA 14
       2~00101111 # 1: ADD 15
       2~11100000 # 2: OUT <nil>
-      2~0        # 3: <niL>
+      2~11110000 # 3: HLT <nil>
       2~0        # 4: <niL>
       2~0        # 5: <niL>
       2~0        # 6: <niL>
@@ -57,8 +57,8 @@ module.exports = class RAM extends Module
       out: new Flag '[data-ram-flag="out"]'
 
     # Init
-    @flags.in.on-click  ~> @flip \in
-    @flags.out.on-click ~> @flip \out
+    @dump.set @contents, @addr, @in
+    @bits.set @value
 
   expose-register: (name, reg) ->
     @inputs[name] = reg
@@ -68,11 +68,15 @@ module.exports = class RAM extends Module
       for val, addr in @contents
         ' ' + (pad 2, hex addr) + '    ' + (pad 8, bin val) + '  ' + (pad 2, hex val) + '  ' + (pad 3, dec val)
 
-  clock: (bus) ->
-    @addr  = @inputs.mar.value
+  move: (addr) ->
+    @addr  = addr
     @value = @contents[@addr]
-    if @out then bus.set @value
     @bits.set @value
-    @dump.set @contents, @addr
+    @dump.set @contents, @addr, @in
 
+  rise: (bus) ->
+    if @out then bus.set @value
+
+  fall: (bus) ->
+    @move @inputs.mar.value
 

@@ -16,6 +16,8 @@ export bin = (.to-string 2)
 
 export wrap = (a, b, n) --> if n < a then b else if n > b then a else n
 
+export nibbles = (byte) -> [ (byte .>>. 4), (byte .&. 15) ]
+
 
 # Strings
 

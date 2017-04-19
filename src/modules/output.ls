@@ -28,7 +28,9 @@ module.exports = class Output extends Module
     # Init
     @display.hex off
 
-  clock: (bus) ->
+  rise: ->
+
+  fall: (bus) ->
     if @in then @value = bus.value
     @display.set @value
 

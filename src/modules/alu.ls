@@ -28,12 +28,12 @@ module.exports = class ALU extends Module
     if not @inputs[name]? then warn
     @inputs[name] = reg
 
-  clock: (bus) ->
+  rise: (bus) ->
+    if @out then bus.set @value
+
+  fall: ->
     a = @inputs.a.value
     b = @inputs.b.value
     @value = if @sub then a - b else a + b
     @bits.set @value
-    if @out then
-      log "ALU writing to bus:", @value
-      bus.set @value
 

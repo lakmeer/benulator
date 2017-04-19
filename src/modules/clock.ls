@@ -48,5 +48,6 @@ module.exports = class Clock extends Module
   on-clock: (λ) ->
     @callbacks.push λ
 
-  clock: ->  # Clock doesn't implement 'clock'
+  rise: ->  # Clock doesn't implement 'clock'
+  fall: ->  # Clock doesn't implement 'fall'
 

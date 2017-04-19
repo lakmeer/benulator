@@ -16,8 +16,13 @@ module.exports = class Module
     @log = off
     @_flags = []
 
-  clock: (bus) ->
-    warn "Module " + @@@display-name + " has not impelmented 'clock'"
+  rise: (bus) ->
+    name = @@@display-name
+    warn "Module #name has not impelmented 'rise'"
+
+  fall: (bus) ->
+    name = @@@display-name
+    warn "Module #name has not impelmented 'fall'"
 
   flag: (name, value = off) ->
     this[name] = value

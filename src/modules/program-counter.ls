@@ -31,12 +31,14 @@ module.exports = class ProgramCounter extends Module
       out: new Flag '[data-pc-flag="co"]'
       jmp: new Flag '[data-pc-flag="j"]'
 
-  clock: (bus) ->
-    if @inc
-      @value = wrap 0, 15, @value + 1
-      @bits.set  @value
-      @digit.set @value
+  increment: ->
+    @value = wrap 0, 15, @value + 1
+    @bits.set  @value
+    @digit.set @value
 
-    if @out
-      bus.set @value
+  rise: (bus) ->
+    if @out then bus.set @value
+
+  fall: (bus) ->
+    if @inc then @increment!
 

@@ -30,10 +30,10 @@ module.exports = class Mainbus extends Module
   set: ->
     if @wrote then return warn "Mainbus::clock - already got written to this cycle!"
     @value = it
+    @wrote = yes
     @bits.set it
     @digit.set pad 2, it.to-string 16
-    @wrote = yes
 
-  clock: ->
-    @wrote = no
+  rise: ->
+  fall: -> @wrote = no
 

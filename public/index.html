@@ -29,6 +29,8 @@
       </div>
 
       <div class="module" id="memory-access">
+        <div class="arrow mar-to-ram-address"></div>
+
         <h3>MAR</h3>
 
         <div class="flags">
@@ -51,6 +53,8 @@
           <div class="flag" data-ram-flag="out">RO</div>
         </div>
 
+        <div class="memory-dump" data-ram-dump></div>
+
         <div class="control">
           <div class="led red" data-ram-bit="7"></div>
           <div class="led red" data-ram-bit="6"></div>
@@ -63,26 +67,32 @@
         </div>
       </div>
 
-      <div class="module" id="ram">
-        <pre class="memory-dump" data-ram-dump></pre>
-      </div>
-
       <div class="module" id="instruction">
-        <h3>Reg I</h3>
+        <h3>Instr Register</h3>
+
+        <div class="flags">
+          <div class="flag" data-instr-flag="in">II</div>
+          <div class="flag" data-instr-flag="out">IO</div>
+        </div>
 
         <div class="control">
-          <div class="led blue" data-inst-bit="7"></div>
-          <div class="led blue" data-inst-bit="6"></div>
-          <div class="led blue" data-inst-bit="5"></div>
-          <div class="led blue" data-inst-bit="4"></div>
-          <div class="readout blue" data-inst-value-high>0</div>
-          <div class="led yellow" data-inst-bit="3"></div>
-          <div class="led yellow" data-inst-bit="2"></div>
-          <div class="led yellow" data-inst-bit="1"></div>
-          <div class="led yellow" data-inst-bit="0"></div>
+          <div class="readout blue" data-instr-value>0</div>
+          <div class="readout yellow" data-arg-value>0</div>
+        </div>
+
+        <div class="control">
+          <div class="led blue" data-instr-bit="7"></div>
+          <div class="led blue" data-instr-bit="6"></div>
+          <div class="led blue" data-instr-bit="5"></div>
+          <div class="led blue" data-instr-bit="4"></div>
+          <div class="led yellow" data-instr-bit="3"></div>
+          <div class="led yellow" data-instr-bit="2"></div>
+          <div class="led yellow" data-instr-bit="1"></div>
+          <div class="led yellow" data-instr-bit="0"></div>
         </div>
       </div>
     </div>
+
 
     <div class="mainbus">
       <div class="mainbus-strips">
@@ -195,21 +205,21 @@
         <h3>Control</h3>
 
         <div class="control">
-          <div class="control vert"> <div class="led yellow" data-cv="hlt"></div> <label>HLT</label></div>
-          <div class="control vert"> <div class="led yellow" data-cv="mi"></div>  <label>MI</label> </div>
-          <div class="control vert"> <div class="led yellow" data-cv="ri"></div>  <label>RI</label> </div>
-          <div class="control vert"> <div class="led yellow" data-cv="ro"></div>  <label>RO</label> </div>
-          <div class="control vert"> <div class="led yellow" data-cv="io"></div>  <label>IO</label> </div>
-          <div class="control vert"> <div class="led yellow" data-cv="ii"></div>  <label>II</label> </div>
-          <div class="control vert"> <div class="led yellow" data-cv="ai"></div>  <label>AI</label> </div>
-          <div class="control vert"> <div class="led yellow" data-cv="ao"></div>  <label>AO</label> </div>
-          <div class="control vert"> <div class="led yellow" data-cv="eo"></div>  <label>EO</label> </div>
-          <div class="control vert"> <div class="led yellow" data-cv="su"></div>  <label>SU</label> </div>
-          <div class="control vert"> <div class="led yellow" data-cv="bi"></div>  <label>BI</label> </div>
-          <div class="control vert"> <div class="led yellow" data-cv="oi"></div>  <label>OI</label> </div>
-          <div class="control vert"> <div class="led yellow" data-cv="ce"></div>  <label>CE</label> </div>
-          <div class="control vert"> <div class="led yellow" data-cv="co"></div>  <label>CO</label> </div>
-          <div class="control vert"> <div class="led yellow" data-cv="j"></div>   <label>J</label>  </div>
+          <div class="control vert"> <div class="led blue" data-cv="hlt"></div> <label>HLT</label></div>
+          <div class="control vert"> <div class="led blue" data-cv="mi"></div>  <label>MI</label> </div>
+          <div class="control vert"> <div class="led blue" data-cv="ri"></div>  <label>RI</label> </div>
+          <div class="control vert"> <div class="led blue" data-cv="ro"></div>  <label>RO</label> </div>
+          <div class="control vert"> <div class="led blue" data-cv="io"></div>  <label>IO</label> </div>
+          <div class="control vert"> <div class="led blue" data-cv="ii"></div>  <label>II</label> </div>
+          <div class="control vert"> <div class="led blue" data-cv="ai"></div>  <label>AI</label> </div>
+          <div class="control vert"> <div class="led blue" data-cv="ao"></div>  <label>AO</label> </div>
+          <div class="control vert"> <div class="led blue" data-cv="eo"></div>  <label>EO</label> </div>
+          <div class="control vert"> <div class="led blue" data-cv="su"></div>  <label>SU</label> </div>
+          <div class="control vert"> <div class="led blue" data-cv="bi"></div>  <label>BI</label> </div>
+          <div class="control vert"> <div class="led blue" data-cv="oi"></div>  <label>OI</label> </div>
+          <div class="control vert"> <div class="led blue" data-cv="ce"></div>  <label>CE</label> </div>
+          <div class="control vert"> <div class="led blue" data-cv="co"></div>  <label>CO</label> </div>
+          <div class="control vert"> <div class="led blue" data-cv="j"></div>   <label>J</label>  </div>
         </div>
       </div>
     </div>
