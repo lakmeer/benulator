@@ -83,7 +83,7 @@ init = ->
 
   mpc = 0
 
-  [ NOP, LDA, ADD, _, _, _, _, _, _, _, _, _, _, _, OUT, HLT, ] = [ 0 to 15 ]
+  [ NOP, LDA, ADD, SUB, STA, _, JMP, LOI, JC, _, _, _, _, _, OUT, HLT, ] = [ 0 to 15 ]
 
   microcode = (mpc, instr, arg = 0) ->
 
@@ -95,6 +95,11 @@ init = ->
         | NOP => [ ]
         | LDA => [ [ \io \mi ], [ \ro \ai ] ]
         | ADD => [ [ \io \mi ], [ \ro \bi ], [ \eo \ai ] ]
+        | SUB => [ [ \io \mi ], [ \ro \bi ], [ \su \eo \ai ] ]
+        | STA => [ [ \io \mi ], [ \ri \ao ] ]
+        | JMP => [ [ \io \ci ] ]
+        | LOI => [ [ \io \ai ] ]
+        # JC
         | OUT => [ [ \ao \oi ] ]
         | HLT => [ [ \hlt ] ]
 
