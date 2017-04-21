@@ -21,6 +21,8 @@ body {
   display: flex;
   font-family: monospace;
   align-items: stretch;
+  max-width: 940px;
+  margin: 20px auto;
 }
 
 body .left, body .right {
